@@ -3,7 +3,16 @@ export default function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { password: submittedPassword } = req.body || {};
+  // Ensure body is parsed and password is provided
+  if (!req.body || typeof req.body !== 'object' || !req.body.password) {
+    res.setHeader(
+      'Set-Cookie',
+      'auth=; HttpOnly; Secure; SameSite=Strict; Max-Age=0'
+    );
+    return res.status(400).json({ error: 'Password is required' });
+  }
+
+  const submittedPassword = req.body.password;
   const correctPassword = process.env.AUTH_PASSWORD;
 
   // Check if auth cookie exists
