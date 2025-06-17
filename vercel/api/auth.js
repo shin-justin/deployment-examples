@@ -3,17 +3,31 @@ export default function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const submittedPassword = req.body?.password;
+  const { password: submittedPassword } = req.body || {};
   const correctPassword = process.env.AUTH_PASSWORD;
 
+  // Check if auth cookie exists
+  const authCookie = req.headers.cookie
+    ?.split('; ')
+    .find((row) => row.startsWith('auth='));
+  const isAuthenticated = authCookie && authCookie.split('=')[1] === 'valid';
+
   if (submittedPassword === correctPassword) {
-    // Set a secure cookie
+    // Set or refresh cookie on correct password
     res.setHeader(
       'Set-Cookie',
       'auth=valid; HttpOnly; Secure; SameSite=Strict; Max-Age=3600'
     );
     return res.status(200).json({ message: 'Authenticated' });
+  } else if (isAuthenticated) {
+    // Allow if already authenticated, but don’t refresh cookie
+    return res.status(200).json({ message: 'Authenticated' });
   } else {
+    // Clear cookie and deny access on incorrect/empty password
+    res.setHeader(
+      'Set-Cookie',
+      'auth=; HttpOnly; Secure; SameSite=Strict; Max-Age=0'
+    );
     return res.status(401).json({ error: 'Incorrect password' });
   }
 }

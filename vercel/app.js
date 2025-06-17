@@ -28,6 +28,8 @@ const publicApi = (() => {
   function getJoke() {
     if (!jokeBtn || !jokeText) {
       console.error('DOM elements missing');
+      console.log(process.env.AUTH_PASSWORD);
+
       return;
     }
     const debouncedFetch = debounce(fetchJoke, 500);
