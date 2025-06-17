@@ -1,0 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
+.joke-btn {
+  margin: 1rem;
+}
