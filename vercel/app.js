@@ -17,7 +17,8 @@ const publicApi = (() => {
     try {
       const response = await fetch(END_POINT);
       const data = await response.json();
-      jokeText.textContent = data.value;
+      const newString = data.value.replace(/Chuck Norris/g, 'Giorgio');
+      jokeText.textContent = newString;
     } catch (err) {
       jokeText.textContent = 'Oops, no joke! Try again.';
       console.error('Fetch error:', err);

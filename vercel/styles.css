@@ -2,6 +2,23 @@
   box-sizing: border-box;
 }
 
+.grid-container {
+  display: grid;
+  place-content: center;
+}
+
+button {
+  all: unset;
+}
+
 .joke-btn {
   margin: 1rem;
+  display: inline-flex;
+  text-align: center;
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  color: white;
+  background-color: teal;
 }
